@@ -5,6 +5,8 @@ import { createTalent, getUserTalent, updateTalent } from '../services/talentSer
 import { TALENT_TYPES } from '../types/talent'
 import type { Talent } from '../types/talent'
 import { StatusBadge } from './StatusBadge'
+import { VideoEmbed } from './VideoEmbed'
+import { parseVideoUrl } from '../utils/videoEmbed'
 
 interface Props {
   registrationOpen: boolean
@@ -289,6 +291,13 @@ export function RegistrationForm({ registrationOpen }: Props) {
                 className="input"
                 required={form.demoType === 'video'}
               />
+              <p className="text-xs text-slate-400 mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+                <span>Plataformas soportadas:</span>
+                <span className="font-medium text-red-500">YouTube</span>
+                <span className="font-medium text-sky-500">Vimeo</span>
+                <span className="font-medium text-emerald-500">Google Drive</span>
+              </p>
+              {form.videoUrl && <VideoPreview url={form.videoUrl} />}
             </div>
           )}
 
@@ -322,6 +331,17 @@ function Field({ label, value, className = '' }: { label: string; value: string;
     <div className={className}>
       <dt className="text-slate-500 font-medium mb-0.5">{label}</dt>
       <dd className="text-slate-900">{value}</dd>
+    </div>
+  )
+}
+
+function VideoPreview({ url }: { url: string }) {
+  const { provider } = parseVideoUrl(url)
+  if (provider === 'unknown') return null
+  return (
+    <div className="mt-3">
+      <p className="text-xs text-slate-400 mb-1.5">Vista previa:</p>
+      <VideoEmbed url={url} title="Vista previa" />
     </div>
   )
 }
