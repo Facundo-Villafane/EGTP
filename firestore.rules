@@ -1,0 +1,80 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function votingIsOpen() {
+      return get(/databases/$(database)/documents/settings/event).data.votingOpen == true;
+    }
+
+    function registrationIsOpen() {
+      return get(/databases/$(database)/documents/settings/event).data.registrationOpen == true;
+    }
+
+    // Users collection
+    match /users/{uid} {
+      allow read:   if isAuthenticated();
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Talents collection
+    match /talents/{talentId} {
+      // Anyone authenticated can read approved talents; admins see all
+      allow read: if isAuthenticated() && (
+        resource.data.status == 'approved' || isAdmin()
+      );
+
+      // Create: authenticated user, registration open, can only create for themselves
+      allow create: if isAuthenticated() &&
+        registrationIsOpen() &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.votesCount == 0;
+
+      // Update: owner can update while registration open (resets to pending)
+      //         admin can update anything
+      allow update: if isAdmin() || (
+        isOwner(resource.data.userId) &&
+        registrationIsOpen() &&
+        request.resource.data.userId == resource.data.userId
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    // Votes collection — document ID is the voter's UID
+    match /votes/{userId} {
+      allow read:   if isOwner(userId) || isAdmin();
+
+      // Can only cast once, must match own UID, voting must be open
+      allow create: if isOwner(userId) &&
+        votingIsOpen() &&
+        request.resource.data.userId == request.auth.uid;
+
+      // Votes are immutable
+      allow update, delete: if false;
+    }
+
+    // Settings — only admins can write
+    match /settings/{doc} {
+      allow read:  if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}
