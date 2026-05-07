@@ -92,7 +92,7 @@ export function HeroSection({ settings, participantCount }: Props) {
 
         {!firebaseUser && !domainError && (
           <p className="mt-6 text-brand-200 text-sm">
-            Ingresá con tu cuenta corporativa para inscribirte o votar.
+            Ingresá con Google para inscribirte o votar.
           </p>
         )}
       </div>
