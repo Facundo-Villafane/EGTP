@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import type { Talent } from '../types/talent'
-import { TALENT_TYPES } from '../types/talent'
 import { TalentCard } from './TalentCard'
 
 interface Props {
