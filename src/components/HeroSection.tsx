@@ -1,6 +1,7 @@
 import type { EventSettings } from '../types/settings'
 import { useAuth } from '../context/AuthContext'
 import { signInWithGoogle } from '../services/authService'
+import { GradientBars } from './ui/GradientBars'
 
 interface Props {
   settings: EventSettings
@@ -15,11 +16,7 @@ export function HeroSection({ settings, participantCount }: Props) {
       id="hero"
       className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background"
     >
-      {/* Spotlight radials */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="spotlight-radial absolute -top-40 -left-40 w-[600px] h-[600px]" />
-        <div className="spotlight-radial absolute -bottom-40 -right-40 w-[600px] h-[600px]" />
-      </div>
+      <GradientBars />
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
         {/* Now Casting pill */}
