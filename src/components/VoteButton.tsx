@@ -16,7 +16,7 @@ export function VoteButton({ talent, votingOpen, hasVoted, votedThis, onVote }: 
 
   if (!votingOpen) {
     return (
-      <p className="text-center text-xs text-slate-400 py-2">
+      <p className="text-on-surface-variant/50 text-xs text-center py-2">
         La votación no está abierta todavía.
       </p>
     )
@@ -24,7 +24,7 @@ export function VoteButton({ talent, votingOpen, hasVoted, votedThis, onVote }: 
 
   if (votedThis) {
     return (
-      <div className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-brand-50 text-brand-700 text-sm font-semibold">
+      <div className="glass-panel neon-glow-primary w-full py-3 rounded-xl text-primary font-bold text-sm flex items-center justify-center gap-2">
         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
         </svg>
@@ -35,7 +35,7 @@ export function VoteButton({ talent, votingOpen, hasVoted, votedThis, onVote }: 
 
   if (hasVoted) {
     return (
-      <p className="text-center text-xs text-slate-400 py-2">
+      <p className="text-on-surface-variant/50 text-xs text-center py-2">
         Ya emitiste tu voto.
       </p>
     )
@@ -43,17 +43,17 @@ export function VoteButton({ talent, votingOpen, hasVoted, votedThis, onVote }: 
 
   if (confirming) {
     return (
-      <div className="space-y-2">
-        <p className="text-center text-sm text-slate-700 font-medium px-2">
-          ¿Confirmás tu voto para <span className="text-brand-700">{talent.name}</span>?
+      <div className="glass-panel rounded-2xl p-4 space-y-3">
+        <p className="text-center text-on-surface-variant text-sm px-2">
+          ¿Confirmás tu voto para <span className="text-primary font-bold">{talent.name}</span>?
           <br />
-          <span className="text-xs text-slate-400">Esta acción no se puede cambiar.</span>
+          <span className="text-xs text-on-surface-variant/60">Esta acción no se puede cambiar.</span>
         </p>
-        {error && <p className="text-red-500 text-xs text-center">{error}</p>}
+        {error && <p className="text-error text-xs text-center">{error}</p>}
         <div className="flex gap-2">
           <button
             onClick={() => { setConfirming(false); setError('') }}
-            className="flex-1 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-medium hover:bg-slate-50"
+            className="glass-panel flex-1 py-2 rounded-xl text-sm text-on-surface-variant hover:text-on-surface transition-colors"
             disabled={voting}
           >
             Cancelar
@@ -72,7 +72,7 @@ export function VoteButton({ talent, votingOpen, hasVoted, votedThis, onVote }: 
               }
             }}
             disabled={voting}
-            className="flex-1 btn-primary text-sm py-2"
+            className="buzzer-btn flex-1 py-2 rounded-xl text-sm font-bold text-white uppercase"
           >
             {voting ? (
               <span className="flex items-center justify-center gap-1">
@@ -89,9 +89,9 @@ export function VoteButton({ talent, votingOpen, hasVoted, votedThis, onVote }: 
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="btn-primary w-full text-sm py-2.5 gap-2"
+      className="buzzer-btn w-full py-4 rounded-xl font-headline-md text-headline-md text-white uppercase tracking-widest flex items-center justify-center gap-3"
     >
-      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
         <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
       </svg>
       Votar

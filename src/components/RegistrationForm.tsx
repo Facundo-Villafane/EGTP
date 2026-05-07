@@ -90,10 +90,10 @@ export function RegistrationForm({ registrationOpen }: Props) {
 
   if (!firebaseUser) {
     return (
-      <section id="inscripcion" className="py-24 bg-slate-50">
+      <section id="inscripcion" className="py-24 bg-background">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">Inscripción</h2>
-          <p className="text-slate-600 mb-8">Ingresá con Google para inscribirte al concurso.</p>
+          <h2 className="font-headline-lg text-headline-lg text-primary uppercase mb-4">Inscripción</h2>
+          <p className="text-on-surface-variant mb-8">Ingresá con Google para inscribirte al concurso.</p>
           <button onClick={() => void signInWithGoogle()} className="btn-primary gap-3 text-base px-8 py-4">
             Ingresar con Google
           </button>
@@ -104,13 +104,13 @@ export function RegistrationForm({ registrationOpen }: Props) {
 
   if (!registrationOpen && !existing) {
     return (
-      <section id="inscripcion" className="py-24 bg-slate-50">
+      <section id="inscripcion" className="py-24 bg-background">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">Inscripción</h2>
-          <div className="card p-8">
+          <h2 className="font-headline-lg text-headline-lg text-primary uppercase mb-4">Inscripción</h2>
+          <div className="glass-panel p-8 rounded-3xl">
             <span className="text-4xl mb-4 block">⏰</span>
-            <p className="text-slate-700 font-medium">La inscripción está cerrada por el momento.</p>
-            <p className="text-slate-500 text-sm mt-2">Podés seguir viendo los talentos inscriptos.</p>
+            <p className="text-on-surface font-medium">La inscripción está cerrada por el momento.</p>
+            <p className="text-on-surface-variant text-sm mt-2">Podés seguir viendo los talentos inscriptos.</p>
           </div>
         </div>
       </section>
@@ -119,9 +119,9 @@ export function RegistrationForm({ registrationOpen }: Props) {
 
   if (loading) {
     return (
-      <section id="inscripcion" className="py-24 bg-slate-50">
+      <section id="inscripcion" className="py-24 bg-background">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <div className="w-8 h-8 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto" />
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto" />
         </div>
       </section>
     )
@@ -130,30 +130,30 @@ export function RegistrationForm({ registrationOpen }: Props) {
   // Show existing registration (not editing)
   if (existing && !editing) {
     return (
-      <section id="inscripcion" className="py-24 bg-slate-50">
+      <section id="inscripcion" className="py-24 bg-background">
         <div className="max-w-2xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-slate-900 mb-2 text-center">Tu inscripción</h2>
-          <p className="text-slate-500 text-center mb-8">Tu talento fue registrado correctamente.</p>
+          <h2 className="font-headline-lg text-headline-lg text-primary uppercase mb-2 text-center">Tu inscripción</h2>
+          <p className="text-on-surface-variant text-center mb-8">Tu talento fue registrado correctamente.</p>
 
           {success && (
-            <div className="mb-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm font-medium text-center">
+            <div className="mb-4 p-4 bg-primary/10 border border-primary/40 rounded-xl text-primary text-sm font-medium text-center">
               ¡Inscripción actualizada correctamente!
             </div>
           )}
 
-          <div className="card p-6 space-y-4">
+          <div className="glass-panel p-6 rounded-3xl space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img src={existing.photoURL} alt="" className="w-12 h-12 rounded-full object-cover" />
+                <img src={existing.photoURL} alt="" className="w-12 h-12 rounded-full object-cover border-2 border-primary" />
                 <div>
-                  <p className="font-semibold text-slate-900">{existing.name}</p>
-                  <p className="text-sm text-slate-500">{existing.email}</p>
+                  <p className="font-semibold text-on-surface">{existing.name}</p>
+                  <p className="text-sm text-on-surface-variant">{existing.email}</p>
                 </div>
               </div>
               <StatusBadge status={existing.status} />
             </div>
 
-            <hr className="border-slate-100" />
+            <hr className="border-outline-variant/30" />
 
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <Field label="Talento"           value={existing.talentType} />
@@ -162,9 +162,9 @@ export function RegistrationForm({ registrationOpen }: Props) {
               <Field label="Descripción"        value={existing.description} className="sm:col-span-2" />
               {existing.videoUrl && (
                 <div className="sm:col-span-2">
-                  <dt className="text-slate-500 font-medium">Video</dt>
+                  <dt className="text-on-surface-variant font-medium">Video</dt>
                   <dd>
-                    <a href={existing.videoUrl} target="_blank" rel="noopener noreferrer" className="text-brand-600 hover:underline break-all">
+                    <a href={existing.videoUrl} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline break-all">
                       {existing.videoUrl}
                     </a>
                   </dd>
@@ -173,7 +173,7 @@ export function RegistrationForm({ registrationOpen }: Props) {
             </dl>
 
             {existing.status === 'pending' && (
-              <p className="text-amber-700 bg-amber-50 rounded-lg px-4 py-3 text-sm">
+              <p className="text-on-surface-variant bg-surface-container-high/60 rounded-lg px-4 py-3 text-sm">
                 Tu talento está pendiente de aprobación por el equipo organizador.
               </p>
             )}
@@ -191,22 +191,22 @@ export function RegistrationForm({ registrationOpen }: Props) {
 
   // Form (create or edit)
   return (
-    <section id="inscripcion" className="py-24 bg-slate-50">
+    <section id="inscripcion" className="py-24 bg-background">
       <div className="max-w-2xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-slate-900 mb-2 text-center">
+        <h2 className="font-headline-lg text-headline-lg text-primary uppercase mb-2 text-center">
           {existing ? 'Editar inscripción' : 'Inscribirme'}
         </h2>
-        <p className="text-slate-500 text-center mb-8">
+        <p className="text-on-surface-variant text-center mb-8">
           Completá el formulario y mostrá tu talento.
         </p>
 
-        <form onSubmit={(e) => void handleSubmit(e)} className="card p-6 sm:p-8 space-y-5">
+        <form onSubmit={(e) => void handleSubmit(e)} className="glass-panel p-8 rounded-3xl space-y-5">
           {/* Auto-filled user info */}
-          <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl">
-            <img src={firebaseUser.photoURL ?? undefined} alt="" className="w-10 h-10 rounded-full" />
+          <div className="bg-surface-container-low rounded-xl p-4 flex items-center gap-3">
+            <img src={firebaseUser.photoURL ?? undefined} alt="" className="w-10 h-10 rounded-full border-2 border-primary" />
             <div>
-              <p className="font-medium text-slate-800">{firebaseUser.displayName}</p>
-              <p className="text-sm text-slate-500">{firebaseUser.email}</p>
+              <p className="font-medium text-on-surface">{firebaseUser.displayName}</p>
+              <p className="text-sm text-on-surface-variant">{firebaseUser.email}</p>
             </div>
           </div>
 
@@ -249,7 +249,7 @@ export function RegistrationForm({ registrationOpen }: Props) {
               required
               maxLength={500}
             />
-            <p className="text-xs text-slate-400 mt-1 text-right">{form.description.length}/500</p>
+            <p className="text-xs text-on-surface-variant/60 mt-1 text-right">{form.description.length}/500</p>
           </div>
 
           <div>
@@ -260,8 +260,8 @@ export function RegistrationForm({ registrationOpen }: Props) {
                   key={type}
                   className={`flex-1 flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition-colors ${
                     form.demoType === type
-                      ? 'border-brand-500 bg-brand-50'
-                      : 'border-slate-200 hover:border-slate-300'
+                      ? 'border-primary bg-primary/20'
+                      : 'border-outline-variant/20 bg-surface-container-low hover:bg-surface-bright'
                   }`}
                 >
                   <input
@@ -270,9 +270,9 @@ export function RegistrationForm({ registrationOpen }: Props) {
                     value={type}
                     checked={form.demoType === type}
                     onChange={() => set('demoType', type)}
-                    className="accent-brand-600"
+                    className="accent-primary"
                   />
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-medium text-on-surface">
                     {type === 'live' ? '🎭 Presentación en vivo' : '🎬 Compartir video'}
                   </span>
                 </label>
@@ -291,18 +291,18 @@ export function RegistrationForm({ registrationOpen }: Props) {
                 className="input"
                 required={form.demoType === 'video'}
               />
-              <p className="text-xs text-slate-400 mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
+              <p className="text-xs text-on-surface-variant/60 mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
                 <span>Plataformas soportadas:</span>
-                <span className="font-medium text-red-500">YouTube</span>
-                <span className="font-medium text-sky-500">Vimeo</span>
-                <span className="font-medium text-emerald-500">Google Drive</span>
+                <span className="font-medium bg-primary/20 text-primary px-1.5 rounded">YouTube</span>
+                <span className="font-medium bg-primary/20 text-primary px-1.5 rounded">Vimeo</span>
+                <span className="font-medium bg-primary/20 text-primary px-1.5 rounded">Google Drive</span>
               </p>
               {form.videoUrl && <VideoPreview url={form.videoUrl} />}
             </div>
           )}
 
           {error && (
-            <p className="text-red-600 bg-red-50 rounded-lg px-4 py-3 text-sm">{error}</p>
+            <p className="bg-red-900/30 border border-error/40 text-error rounded-xl px-4 py-3 text-sm">{error}</p>
           )}
 
           <div className="flex gap-3 pt-2">
@@ -311,9 +311,13 @@ export function RegistrationForm({ registrationOpen }: Props) {
                 Cancelar
               </button>
             )}
-            <button type="submit" disabled={saving} className="btn-primary flex-1">
+            <button
+              type="submit"
+              disabled={saving}
+              className="buzzer-btn flex-1 py-4 rounded-xl font-headline-md text-headline-md text-white uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
+            >
               {saving ? (
-                <span className="flex items-center gap-2">
+                <span className="flex items-center justify-center gap-2">
                   <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                   Guardando...
                 </span>
@@ -329,8 +333,8 @@ export function RegistrationForm({ registrationOpen }: Props) {
 function Field({ label, value, className = '' }: { label: string; value: string; className?: string }) {
   return (
     <div className={className}>
-      <dt className="text-slate-500 font-medium mb-0.5">{label}</dt>
-      <dd className="text-slate-900">{value}</dd>
+      <dt className="text-on-surface-variant font-medium mb-0.5">{label}</dt>
+      <dd className="text-on-surface">{value}</dd>
     </div>
   )
 }
@@ -340,7 +344,7 @@ function VideoPreview({ url }: { url: string }) {
   if (provider === 'unknown') return null
   return (
     <div className="mt-3">
-      <p className="text-xs text-slate-400 mb-1.5">Vista previa:</p>
+      <p className="text-xs text-on-surface-variant/60 mb-1.5">Vista previa:</p>
       <VideoEmbed url={url} title="Vista previa" />
     </div>
   )

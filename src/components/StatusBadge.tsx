@@ -1,9 +1,9 @@
 import type { TalentStatus } from '../types/talent'
 
 const MAP: Record<TalentStatus, { label: string; className: string }> = {
-  pending:  { label: 'Pendiente',  className: 'bg-amber-100 text-amber-700' },
-  approved: { label: 'Aprobado',   className: 'bg-emerald-100 text-emerald-700' },
-  rejected: { label: 'Rechazado',  className: 'bg-red-100 text-red-600' },
+  pending:  { label: 'Pendiente',  className: 'bg-surface-container-high text-on-surface-variant border border-outline-variant/40' },
+  approved: { label: 'Aprobado',   className: 'bg-primary/20 text-primary border border-primary/40' },
+  rejected: { label: 'Rechazado',  className: 'bg-red-900/30 text-error border border-error/40' },
 }
 
 export function StatusBadge({ status }: { status: TalentStatus }) {
@@ -18,14 +18,14 @@ export function StatusBadge({ status }: { status: TalentStatus }) {
 export function DemoBadge({ demoType }: { demoType: 'video' | 'live' }) {
   if (demoType === 'live') {
     return (
-      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-100 text-rose-700">
-        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+      <span className="glass-panel inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold text-error border border-error/40">
+        <span className="w-1.5 h-1.5 rounded-full bg-error animate-pulse" />
         En vivo
       </span>
     )
   }
   return (
-    <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-700">
+    <span className="glass-panel inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold text-secondary border border-secondary/40">
       Video
     </span>
   )
