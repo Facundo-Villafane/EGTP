@@ -5,7 +5,7 @@ import { signOut } from '../services/authService'
 import { signInWithGoogle } from '../services/authService'
 
 export function Navbar() {
-  const { firebaseUser, appUser } = useAuth()
+  const { firebaseUser, appUser, domainError } = useAuth()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -69,6 +69,10 @@ export function Navbar() {
                   Salir
                 </button>
               </div>
+            ) : domainError ? (
+              <span className="text-xs text-red-500 font-medium max-w-[200px] text-right leading-tight">
+                Cuenta no autorizada
+              </span>
             ) : (
               <button onClick={() => void signInWithGoogle()} className="btn-primary text-sm py-2 px-4">
                 Ingresar con Google

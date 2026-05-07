@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function HeroSection({ settings, participantCount }: Props) {
-  const { firebaseUser } = useAuth()
+  const { firebaseUser, domainError } = useAuth()
 
   return (
     <section
@@ -83,7 +83,14 @@ export function HeroSection({ settings, participantCount }: Props) {
           )}
         </div>
 
-        {!firebaseUser && (
+        {domainError && (
+          <div className="mt-6 mx-auto max-w-md bg-red-500/20 border border-red-400/40 rounded-xl px-5 py-4 text-white text-sm">
+            <p className="font-semibold mb-0.5">Cuenta no autorizada</p>
+            <p className="text-red-100">{domainError}</p>
+          </div>
+        )}
+
+        {!firebaseUser && !domainError && (
           <p className="mt-6 text-brand-200 text-sm">
             Ingresá con tu cuenta corporativa para inscribirte o votar.
           </p>
