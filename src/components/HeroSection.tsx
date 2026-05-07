@@ -13,25 +13,28 @@ export function HeroSection({ settings, participantCount }: Props) {
   return (
     <section
       id="hero"
-      className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-accent-500"
+      className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background"
     >
-      {/* Background decoration */}
+      {/* Spotlight radials */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-white/5 rounded-full" />
-        <div className="absolute -bottom-20 -left-20 w-72 h-72 bg-white/5 rounded-full" />
-        <div className="absolute top-1/2 left-1/4 w-48 h-48 bg-white/5 rounded-full -translate-y-1/2" />
+        <div className="spotlight-radial absolute -top-40 -left-40 w-[600px] h-[600px]" />
+        <div className="spotlight-radial absolute -bottom-40 -right-40 w-[600px] h-[600px]" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
-        <div className="mb-6">
-          <span className="text-6xl sm:text-8xl">🎤</span>
+        {/* Now Casting pill */}
+        <div className="mb-8 flex justify-center">
+          <span className="inline-flex items-center gap-2 px-4 py-1 glass-panel rounded-full border border-primary/40 text-primary uppercase font-label-bold text-label-bold tracking-widest text-xs">
+            <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+            Now Casting
+          </span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl font-black text-white leading-tight mb-4">
+        <h1 className="font-display-xl text-[64px] sm:text-display-xl text-white uppercase leading-none mb-6">
           {settings.eventTitle}
         </h1>
 
-        <p className="text-xl sm:text-2xl text-brand-100 mb-8 max-w-2xl mx-auto">
+        <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-2xl mx-auto">
           Mostrá tu talento, descubrí el de tus compañeros y votá por tus favoritos.
         </p>
 
@@ -50,7 +53,7 @@ export function HeroSection({ settings, participantCount }: Props) {
             inactiveLabel="Cerrada"
           />
           {participantCount > 0 && (
-            <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/20 text-white text-sm font-medium">
+            <span className="glass-panel inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
               </svg>
@@ -64,18 +67,24 @@ export function HeroSection({ settings, participantCount }: Props) {
           {firebaseUser ? (
             <>
               {settings.registrationOpen && (
-                <a href="#inscripcion" className="btn-primary bg-white text-brand-700 hover:bg-brand-50 text-base px-8 py-4">
+                <a
+                  href="#inscripcion"
+                  className="golden-buzzer font-headline-md text-headline-md px-10 py-4 rounded-xl text-surface font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all inline-flex items-center justify-center"
+                >
                   Inscribirme
                 </a>
               )}
-              <a href="#talentos" className="btn-secondary bg-white/10 text-white border border-white/30 hover:bg-white/20 text-base px-8 py-4">
+              <a
+                href="#talentos"
+                className="glass-panel font-headline-md text-headline-md px-10 py-4 rounded-xl text-white font-bold uppercase tracking-widest border border-white/20 hover:bg-white/10 transition-all inline-flex items-center justify-center"
+              >
                 Ver talentos
               </a>
             </>
           ) : (
             <button
               onClick={() => void signInWithGoogle()}
-              className="btn-primary bg-white text-brand-700 hover:bg-brand-50 text-base px-8 py-4 gap-3"
+              className="glass-panel border border-primary/40 text-primary font-bold px-8 py-4 rounded-xl inline-flex items-center justify-center gap-3 hover:bg-primary/10 transition-all"
             >
               <GoogleIcon />
               Ingresar con Google para participar
@@ -84,14 +93,14 @@ export function HeroSection({ settings, participantCount }: Props) {
         </div>
 
         {domainError && (
-          <div className="mt-6 mx-auto max-w-md bg-red-500/20 border border-red-400/40 rounded-xl px-5 py-4 text-white text-sm">
+          <div className="mt-6 mx-auto max-w-md glass-panel border border-error/40 text-error rounded-xl px-5 py-4">
             <p className="font-semibold mb-0.5">Cuenta no autorizada</p>
-            <p className="text-red-100">{domainError}</p>
+            <p className="text-sm opacity-80">{domainError}</p>
           </div>
         )}
 
         {!firebaseUser && !domainError && (
-          <p className="mt-6 text-brand-200 text-sm">
+          <p className="mt-6 text-on-surface-variant/60 text-sm">
             Ingresá con Google para inscribirte o votar.
           </p>
         )}
@@ -113,11 +122,11 @@ function StatusChip({
 }) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium ${
-        active ? 'bg-emerald-500/20 text-emerald-200' : 'bg-white/10 text-white/60'
+      className={`glass-panel inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold ${
+        active ? 'text-on-surface' : 'text-on-surface-variant/50'
       }`}
     >
-      <span className={`w-2 h-2 rounded-full ${active ? 'bg-emerald-400 animate-pulse' : 'bg-white/40'}`} />
+      <span className={`w-2 h-2 rounded-full ${active ? 'bg-green-400 animate-pulse' : 'bg-outline-variant'}`} />
       {label}: {active ? activeLabel : inactiveLabel}
     </span>
   )

@@ -17,12 +17,13 @@ export function Navbar() {
   ]
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <nav className="sticky top-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/20 shadow-2xl shadow-primary/20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2 font-bold text-brand-700 text-lg">
-            <span className="text-2xl">🎤</span>
-            <span>EGTP Got Talent</span>
+          <Link to="/" className="flex items-center gap-2">
+            <span className="font-headline-md text-headline-md text-primary tracking-widest uppercase">
+              EGTP Got Talent
+            </span>
           </Link>
 
           {/* Desktop nav */}
@@ -31,7 +32,7 @@ export function Navbar() {
               <a
                 key={l.to}
                 href={l.to}
-                className="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-700 hover:bg-brand-50 transition-colors"
+                className="px-3 py-2 text-sm font-label-bold text-label-bold text-on-surface-variant hover:text-primary transition-colors uppercase"
               >
                 {l.label}
               </a>
@@ -39,10 +40,10 @@ export function Navbar() {
             {appUser?.role === 'admin' && (
               <Link
                 to="/admin"
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-3 py-2 text-sm font-label-bold text-label-bold uppercase transition-colors ${
                   location.pathname === '/admin'
-                    ? 'bg-brand-100 text-brand-700'
-                    : 'text-slate-600 hover:text-brand-700 hover:bg-brand-50'
+                    ? 'text-primary border-b-2 border-primary'
+                    : 'text-on-surface-variant hover:text-primary'
                 }`}
               >
                 Admin
@@ -57,24 +58,24 @@ export function Navbar() {
                 <img
                   src={firebaseUser.photoURL ?? undefined}
                   alt={firebaseUser.displayName ?? ''}
-                  className="w-8 h-8 rounded-full object-cover border-2 border-brand-200"
+                  className="w-8 h-8 rounded-full object-cover border-2 border-primary"
                 />
-                <span className="text-sm font-medium text-slate-700 max-w-[120px] truncate">
+                <span className="text-sm font-medium text-on-surface-variant max-w-[120px] truncate">
                   {firebaseUser.displayName}
                 </span>
                 <button
                   onClick={() => void signOut()}
-                  className="text-sm text-slate-500 hover:text-red-500 transition-colors"
+                  className="text-sm text-on-surface-variant hover:text-primary transition-colors"
                 >
                   Salir
                 </button>
               </div>
             ) : domainError ? (
-              <span className="text-xs text-red-500 font-medium max-w-[200px] text-right leading-tight">
+              <span className="text-xs text-error font-bold max-w-[200px] text-right leading-tight">
                 Cuenta no autorizada
               </span>
             ) : (
-              <button onClick={() => void signInWithGoogle()} className="btn-primary text-sm py-2 px-4">
+              <button onClick={() => void signInWithGoogle()} className="btn-primary text-sm py-2 px-5">
                 Ingresar con Google
               </button>
             )}
@@ -82,7 +83,7 @@ export function Navbar() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100"
+            className="md:hidden p-2 rounded-lg text-on-surface-variant hover:text-primary transition-colors"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Menú"
           >
@@ -98,13 +99,13 @@ export function Navbar() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="md:hidden border-t border-slate-100 py-3 space-y-1">
+          <div className="md:hidden bg-surface/95 backdrop-blur-xl border-t border-outline-variant/20 py-3 space-y-1">
             {links.map((l) => (
               <a
                 key={l.to}
                 href={l.to}
                 onClick={() => setMenuOpen(false)}
-                className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-700 hover:bg-brand-50"
+                className="block px-3 py-2 text-sm font-label-bold text-label-bold text-on-surface-variant hover:text-primary uppercase transition-colors"
               >
                 {l.label}
               </a>
@@ -113,21 +114,21 @@ export function Navbar() {
               <Link
                 to="/admin"
                 onClick={() => setMenuOpen(false)}
-                className="block px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-brand-700 hover:bg-brand-50"
+                className="block px-3 py-2 text-sm font-label-bold text-label-bold text-on-surface-variant hover:text-primary uppercase transition-colors"
               >
                 Admin
               </Link>
             )}
-            <div className="pt-2 border-t border-slate-100">
+            <div className="pt-2 border-t border-outline-variant/20">
               {firebaseUser ? (
                 <div className="flex items-center gap-2 px-3 py-2">
                   <img
                     src={firebaseUser.photoURL ?? undefined}
                     alt=""
-                    className="w-7 h-7 rounded-full"
+                    className="w-7 h-7 rounded-full border-2 border-primary"
                   />
-                  <span className="text-sm text-slate-700 flex-1 truncate">{firebaseUser.displayName}</span>
-                  <button onClick={() => void signOut()} className="text-sm text-red-500">
+                  <span className="text-sm text-on-surface-variant flex-1 truncate">{firebaseUser.displayName}</span>
+                  <button onClick={() => void signOut()} className="text-sm text-on-surface-variant hover:text-primary transition-colors">
                     Salir
                   </button>
                 </div>
