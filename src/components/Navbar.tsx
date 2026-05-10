@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { signOut } from '../services/authService'
 import { signInWithGoogle } from '../services/authService'
+import { EGTPLogo } from './EGTPLogo'
+import { Avatar } from './ui/Avatar'
 
 export function Navbar() {
   const { firebaseUser, appUser, domainError } = useAuth()
@@ -10,32 +12,33 @@ export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const links = [
-    { to: '/#hero',         label: 'Inicio' },
-    { to: '/#inscripcion',  label: 'Inscripción' },
-    { to: '/#talentos',     label: 'Talentos' },
-    { to: '/#votacion',     label: 'Votar' },
+    { to: '/',            label: 'Inicio' },
+    { to: '/inscripcion', label: 'Inscripción' },
+    { to: '/resultados',  label: 'Resultados' },
   ]
 
   return (
     <nav className="sticky top-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/20 shadow-2xl shadow-primary/20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-headline-md text-headline-md text-primary tracking-widest uppercase">
-              EGTP Got Talent
-            </span>
+          <Link to="/" className="flex items-center">
+            <EGTPLogo size="sm" />
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
             {links.map((l) => (
-              <a
+              <Link
                 key={l.to}
-                href={l.to}
-                className="px-3 py-2 text-sm font-label-bold text-label-bold text-on-surface-variant hover:text-primary transition-colors uppercase"
+                to={l.to}
+                className={`px-3 py-2 text-sm font-label-bold text-label-bold uppercase transition-colors ${
+                  location.pathname === l.to
+                    ? 'text-primary border-b-2 border-primary'
+                    : 'text-on-surface-variant hover:text-primary'
+                }`}
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
             {appUser?.role === 'admin' && (
               <Link
@@ -55,11 +58,7 @@ export function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {firebaseUser ? (
               <div className="flex items-center gap-2">
-                <img
-                  src={firebaseUser.photoURL ?? undefined}
-                  alt={firebaseUser.displayName ?? ''}
-                  className="w-8 h-8 rounded-full object-cover border-2 border-primary"
-                />
+                <Avatar src={firebaseUser.photoURL} name={firebaseUser.displayName ?? ''} size="sm" />
                 <span className="text-sm font-medium text-on-surface-variant max-w-[120px] truncate">
                   {firebaseUser.displayName}
                 </span>
@@ -101,14 +100,14 @@ export function Navbar() {
         {menuOpen && (
           <div className="md:hidden bg-surface/95 backdrop-blur-xl border-t border-outline-variant/20 py-3 space-y-1">
             {links.map((l) => (
-              <a
+              <Link
                 key={l.to}
-                href={l.to}
+                to={l.to}
                 onClick={() => setMenuOpen(false)}
                 className="block px-3 py-2 text-sm font-label-bold text-label-bold text-on-surface-variant hover:text-primary uppercase transition-colors"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
             {appUser?.role === 'admin' && (
               <Link
@@ -122,11 +121,7 @@ export function Navbar() {
             <div className="pt-2 border-t border-outline-variant/20">
               {firebaseUser ? (
                 <div className="flex items-center gap-2 px-3 py-2">
-                  <img
-                    src={firebaseUser.photoURL ?? undefined}
-                    alt=""
-                    className="w-7 h-7 rounded-full border-2 border-primary"
-                  />
+                  <Avatar src={firebaseUser.photoURL} name={firebaseUser.displayName ?? ''} size="sm" />
                   <span className="text-sm text-on-surface-variant flex-1 truncate">{firebaseUser.displayName}</span>
                   <button onClick={() => void signOut()} className="text-sm text-on-surface-variant hover:text-primary transition-colors">
                     Salir

@@ -35,9 +35,10 @@ service cloud.firestore {
 
     // Talents collection
     match /talents/{talentId} {
-      // Approved talents are public (visible before login for the gallery).
-      // Admins can read everything regardless of status.
-      allow read: if resource.data.status == 'approved' || isAdmin();
+      // Approved talents are public; owners can read their own (any status); admins read all.
+      allow read: if resource.data.status == 'approved'
+                  || isOwner(resource.data.userId)
+                  || isAdmin();
 
       // Create: authenticated user, registration open, own entry only
       allow create: if isAuthenticated() &&

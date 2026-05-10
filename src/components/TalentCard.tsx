@@ -2,6 +2,7 @@ import type { Talent } from '../types/talent'
 import { DemoBadge } from './StatusBadge'
 import { VoteButton } from './VoteButton'
 import { VideoEmbed } from './VideoEmbed'
+import { Avatar } from './ui/Avatar'
 
 interface Props {
   talent: Talent
@@ -10,6 +11,8 @@ interface Props {
   currentUserId: string | null
   onVote: (talentId: string) => Promise<void>
   showVoteCount?: boolean
+  isVideoActive?: boolean
+  onVideoActivate?: () => void
 }
 
 export function TalentCard({
@@ -19,6 +22,8 @@ export function TalentCard({
   currentUserId,
   onVote,
   showVoteCount = false,
+  isVideoActive = false,
+  onVideoActivate,
 }: Props) {
   const isOwnTalent = currentUserId === talent.userId
   const hasVoted    = userVotedFor !== null
@@ -27,19 +32,25 @@ export function TalentCard({
   const hasVideo = talent.demoType === 'video' && !!talent.videoUrl
 
   return (
-    <article className="glass-panel rounded-3xl overflow-hidden group hover:scale-[1.02] transition-all duration-500 flex flex-col">
+    <article
+      className={`glass-panel rounded-3xl overflow-hidden flex flex-col transition-shadow duration-300 ${
+        isVideoActive ? 'ring-2 ring-primary shadow-2xl shadow-primary/30' : ''
+      }`}
+    >
       {/* Video embed or gradient header */}
       {hasVideo ? (
         <div className="p-3 pb-0">
-          <VideoEmbed url={talent.videoUrl!} title={talent.presentationTitle} />
+          <VideoEmbed
+          url={talent.videoUrl!}
+          title={talent.presentationTitle}
+          isActive={isVideoActive}
+          onPlay={onVideoActivate}
+          expanded={isVideoActive}
+        />
         </div>
       ) : (
         <div className="relative bg-gradient-to-br from-primary-container to-tertiary-container p-6 pb-10 text-center">
-          <img
-            src={talent.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(talent.name)}&background=bd00ff&color=fff`}
-            alt={talent.name}
-            className="w-20 h-20 rounded-full object-cover border-4 border-surface shadow-lg mx-auto"
-          />
+          <Avatar src={talent.photoURL} name={talent.name} size="lg" className="w-20 h-20 border-4 border-surface shadow-lg mx-auto" />
           <span className="mt-3 inline-block bg-primary/20 text-primary border border-primary/40 text-[10px] font-bold px-2 py-1 rounded uppercase tracking-widest">
             {talent.talentType}
           </span>
@@ -52,11 +63,7 @@ export function TalentCard({
           {/* Author row — shown inline for video cards since there's no header */}
           {hasVideo && (
             <div className="flex items-center gap-3 mb-3">
-              <img
-                src={talent.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(talent.name)}&background=bd00ff&color=fff`}
-                alt={talent.name}
-                className="w-9 h-9 rounded-full object-cover flex-shrink-0"
-              />
+              <Avatar src={talent.photoURL} name={talent.name} size="sm" />
               <div className="min-w-0">
                 <p className="font-bold text-on-surface text-sm leading-tight truncate">{talent.name}</p>
                 <p className="text-primary font-medium text-xs">{talent.talentType}</p>

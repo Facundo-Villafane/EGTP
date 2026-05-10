@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { signInWithGoogle } from '../services/authService'
 import { createTalent, getUserTalent, updateTalent } from '../services/talentService'
-import { TALENT_TYPES } from '../types/talent'
+import { TalentTypePicker } from './ui/TalentTypePicker'
 import type { Talent } from '../types/talent'
 import { StatusBadge } from './StatusBadge'
 import { VideoEmbed } from './VideoEmbed'
@@ -133,7 +133,9 @@ export function RegistrationForm({ registrationOpen }: Props) {
       <section id="inscripcion" className="py-24 bg-background">
         <div className="max-w-2xl mx-auto px-4">
           <h2 className="font-headline-lg text-headline-lg text-primary uppercase mb-2 text-center">Tu inscripción</h2>
-          <p className="text-on-surface-variant text-center mb-8">Tu talento fue registrado correctamente.</p>
+          <p className="text-on-surface-variant text-center mb-8">
+            {existing?.status === 'rejected' ? 'Tu inscripción fue revisada por el equipo.' : 'Tu talento fue registrado correctamente.'}
+          </p>
 
           {success && (
             <div className="mb-4 p-4 bg-primary/10 border border-primary/40 rounded-xl text-primary text-sm font-medium text-center">
@@ -178,10 +180,29 @@ export function RegistrationForm({ registrationOpen }: Props) {
               </p>
             )}
 
-            {registrationOpen && (
+            {existing.status === 'rejected' && (
+              <div className="bg-error/10 border border-error/40 rounded-xl px-4 py-4 space-y-3">
+                <p className="text-error font-semibold text-sm">Tu inscripción fue rechazada.</p>
+                <p className="text-on-surface-variant text-sm">
+                  Podés modificar tu propuesta y reenviarla para que el equipo la revise nuevamente.
+                </p>
+                {registrationOpen && (
+                  <button onClick={() => setEditing(true)} className="btn-primary w-full text-sm py-2">
+                    Editar y reenviar inscripción
+                  </button>
+                )}
+              </div>
+            )}
+
+            {existing.status !== 'rejected' && registrationOpen && existing.votesCount === 0 && (
               <button onClick={() => setEditing(true)} className="btn-secondary w-full mt-2">
                 Editar mi inscripción
               </button>
+            )}
+            {existing.status !== 'rejected' && registrationOpen && existing.votesCount > 0 && (
+              <p className="text-center text-xs text-on-surface-variant/60 py-2 mt-2">
+                Tu inscripción ya recibió votos y no puede modificarse.
+              </p>
             )}
           </div>
         </div>
@@ -212,17 +233,13 @@ export function RegistrationForm({ registrationOpen }: Props) {
 
           <div>
             <label className="label">Tipo de talento *</label>
-            <select
+            <TalentTypePicker
               value={form.talentType}
-              onChange={(e) => set('talentType', e.target.value)}
-              className="input"
-              required
-            >
-              <option value="">Seleccioná tu talento...</option>
-              {TALENT_TYPES.map((t) => (
-                <option key={t} value={t}>{t}</option>
-              ))}
-            </select>
+              onChange={(v) => set('talentType', v)}
+            />
+            {!form.talentType && (
+              <p className="text-xs text-on-surface-variant/60 mt-2 ml-1">Elegí una categoría para continuar.</p>
+            )}
           </div>
 
           <div>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { parseVideoUrl } from '../utils/videoEmbed'
 
 const PROVIDER_LABELS: Record<string, string> = {
@@ -12,41 +12,58 @@ const PROVIDER_COLORS: Record<string, string> = {
   youtube: 'bg-red-600',
   vimeo:   'bg-sky-500',
   drive:   'bg-emerald-500',
-  unknown: 'bg-brand-600',
+  unknown: 'bg-primary',
 }
 
 interface Props {
   url: string
   title: string
+  isActive?: boolean      // controlado externamente
+  onPlay?: () => void     // notifica al padre que se quiere reproducir
+  expanded?: boolean      // si true, usa aspect ratio 16:9 más alto
 }
 
-export function VideoEmbed({ url, title }: Props) {
+export function VideoEmbed({ url, title, isActive = true, onPlay, expanded = false }: Props) {
   const [playing, setPlaying] = useState(false)
   const info = parseVideoUrl(url)
 
-  if (playing) {
+  // Al perder el foco activo, resetea al thumbnail (pausa)
+  useEffect(() => {
+    if (!isActive) setPlaying(false)
+  }, [isActive])
+
+  const aspectClass = expanded ? 'pt-[62%]' : 'pt-[56.25%]'
+
+  const handlePlay = () => {
+    onPlay?.()
+    setPlaying(true)
+  }
+
+  const embedSrc = playing && isActive
+    ? info.embedUrl + (info.provider === 'youtube' ? '&autoplay=1' : info.provider === 'vimeo' ? '&autoplay=1' : '')
+    : null
+
+  if (embedSrc) {
     return (
-      <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ paddingTop: '56.25%' }}>
+      <div className={`relative w-full rounded-xl overflow-hidden bg-black ${aspectClass}`}>
         <iframe
           className="absolute inset-0 w-full h-full"
-          src={info.embedUrl}
+          src={embedSrc}
           title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         />
       </div>
     )
   }
 
-  // Thumbnail + play overlay
   return (
     <button
-      onClick={() => setPlaying(true)}
-      className="group relative w-full rounded-xl overflow-hidden bg-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500"
-      style={{ paddingTop: '56.25%' }}
-      aria-label={`Reproducir video: ${title}`}
+      onClick={handlePlay}
+      className="group relative w-full rounded-xl overflow-hidden bg-slate-900 focus:outline-none focus:ring-2 focus:ring-primary"
+      style={{ paddingTop: expanded ? '62%' : '56.25%' }}
+      aria-label={`Reproducir: ${title}`}
     >
-      {/* Thumbnail */}
       {info.thumbnailUrl ? (
         <img
           src={info.thumbnailUrl}
@@ -54,15 +71,13 @@ export function VideoEmbed({ url, title }: Props) {
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-surface-container to-surface-container-highest">
           <ProviderIcon provider={info.provider} />
         </div>
       )}
 
-      {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors" />
 
-      {/* Play button */}
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
         <div className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform duration-200 group-hover:scale-110 ${PROVIDER_COLORS[info.provider]}`}>
           <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">

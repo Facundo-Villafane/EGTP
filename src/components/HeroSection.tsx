@@ -1,7 +1,10 @@
+import { useRef } from 'react'
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import type { EventSettings } from '../types/settings'
 import { useAuth } from '../context/AuthContext'
 import { signInWithGoogle } from '../services/authService'
 import { GradientBars } from './ui/GradientBars'
+import { EGTPLogo } from './EGTPLogo'
 
 interface Props {
   settings: EventSettings
@@ -9,16 +12,49 @@ interface Props {
 }
 
 export function HeroSection({ settings, participantCount }: Props) {
-  const { firebaseUser, domainError } = useAuth()
+  const { firebaseUser } = useAuth()
+  const sectionRef = useRef<HTMLElement>(null)
+
+  const rawX = useMotionValue(0)
+  const rawY = useMotionValue(0)
+  const x = useSpring(rawX, { stiffness: 60, damping: 20 })
+  const y = useSpring(rawY, { stiffness: 60, damping: 20 })
+
+  const textX = useTransform(x, v => v * 8)
+  const textY = useTransform(y, v => v * 6)
+
+  function handleMouseMove(e: React.MouseEvent<HTMLElement>) {
+    const rect = sectionRef.current?.getBoundingClientRect()
+    if (!rect) return
+    rawX.set((e.clientX - rect.left) / rect.width - 0.5)
+    rawY.set((e.clientY - rect.top)  / rect.height - 0.5)
+  }
+
+  function handleMouseLeave() {
+    rawX.set(0)
+    rawY.set(0)
+  }
 
   return (
     <section
+      ref={sectionRef}
       id="hero"
-      className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative z-[2] min-h-[90vh] flex items-center justify-center overflow-hidden"
     >
       <GradientBars />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      {/* Contenido — parallax suave */}
+      <motion.div
+        className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center w-full"
+        style={{ x: textX, y: textY }}
+      >
+        {/* Logo */}
+        <div className="mb-8 flex justify-center">
+          <EGTPLogo size="lg" />
+        </div>
+
         {/* Now Casting pill */}
         <div className="mb-8 flex justify-center">
           <span className="inline-flex items-center gap-2 px-4 py-1 glass-panel rounded-full border border-primary/40 text-primary uppercase font-label-bold text-label-bold tracking-widest text-xs">
@@ -27,11 +63,7 @@ export function HeroSection({ settings, participantCount }: Props) {
           </span>
         </div>
 
-        <h1 className="font-display-xl text-[64px] sm:text-display-xl text-white uppercase leading-none mb-6">
-          {settings.eventTitle}
-        </h1>
-
-        <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-2xl mx-auto">
+<p className="font-body-lg text-body-lg text-on-surface-variant mb-8 max-w-2xl mx-auto">
           Mostrá tu talento, descubrí el de tus compañeros y votá por tus favoritos.
         </p>
 
@@ -65,14 +97,14 @@ export function HeroSection({ settings, participantCount }: Props) {
             <>
               {settings.registrationOpen && (
                 <a
-                  href="#inscripcion"
+                  href="/inscripcion"
                   className="golden-buzzer font-headline-md text-headline-md px-10 py-4 rounded-xl text-surface font-bold uppercase tracking-widest hover:scale-105 active:scale-95 transition-all inline-flex items-center justify-center"
                 >
                   Inscribirme
                 </a>
               )}
               <a
-                href="#talentos"
+                href="/participantes"
                 className="glass-panel font-headline-md text-headline-md px-10 py-4 rounded-xl text-white font-bold uppercase tracking-widest border border-white/20 hover:bg-white/10 transition-all inline-flex items-center justify-center"
               >
                 Ver talentos
@@ -89,19 +121,12 @@ export function HeroSection({ settings, participantCount }: Props) {
           )}
         </div>
 
-        {domainError && (
-          <div className="mt-6 mx-auto max-w-md glass-panel border border-error/40 text-error rounded-xl px-5 py-4">
-            <p className="font-semibold mb-0.5">Cuenta no autorizada</p>
-            <p className="text-sm opacity-80">{domainError}</p>
-          </div>
-        )}
-
-        {!firebaseUser && !domainError && (
+        {!firebaseUser && (
           <p className="mt-6 text-on-surface-variant/60 text-sm">
             Ingresá con Google para inscribirte o votar.
           </p>
         )}
-      </div>
+      </motion.div>
     </section>
   )
 }

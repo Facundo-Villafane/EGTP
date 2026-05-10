@@ -26,6 +26,12 @@ dist-ssr
 # Environment
 .env
 .env.local
+
+# Claude internal memory
+.claude/
+
+# Original GLB asset in src (served from public/ instead)
+src/components/*.glb
 .env.development.local
 .env.test.local
 .env.production.local

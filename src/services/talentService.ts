@@ -5,6 +5,7 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  deleteDoc,
   query,
   where,
   orderBy,
@@ -46,10 +47,12 @@ export function subscribeApprovedTalents(callback: (talents: Talent[]) => void):
   const q = query(
     collection(db, COL),
     where('status', '==', 'approved'),
-    orderBy('votesCount', 'desc'),
   )
   return onSnapshot(q, (snap) => {
-    callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Talent))
+    const talents = snap.docs
+      .map((d) => ({ id: d.id, ...d.data() }) as Talent)
+      .sort((a, b) => b.votesCount - a.votesCount)
+    callback(talents)
   })
 }
 
@@ -66,6 +69,14 @@ export async function updateTalentStatus(id: string, status: TalentStatus): Prom
 
 export async function updateTalent(id: string, data: Partial<TalentInput>): Promise<void> {
   await updateDoc(doc(db, COL, id), { ...data, status: 'pending', updatedAt: serverTimestamp() })
+}
+
+export async function patchTalent(id: string, data: Record<string, unknown>): Promise<void> {
+  await updateDoc(doc(db, COL, id), { ...data, updatedAt: serverTimestamp() })
+}
+
+export async function deleteTalent(id: string): Promise<void> {
+  await deleteDoc(doc(db, COL, id))
 }
 
 export async function incrementVoteCount(talentId: string): Promise<void> {
