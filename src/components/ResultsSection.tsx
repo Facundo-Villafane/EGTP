@@ -36,10 +36,9 @@ function RankRow({ talent, rank }: { talent: Talent; rank: number }) {
   )
 }
 
-function ResultsList({ sorted, visible, showResults }: {
+function ResultsList({ sorted, visible }: {
   sorted: Talent[]
   visible: boolean
-  showResults: boolean
   talents: Talent[]
 }) {
   if (!visible) {
@@ -71,7 +70,7 @@ export function ResultsSection({ talents, showResults, isAdmin, compact = false 
   const visible = showResults || isAdmin
 
   if (compact) {
-    return <ResultsList sorted={sorted} visible={visible} showResults={showResults} talents={talents} />
+    return <ResultsList sorted={sorted} visible={visible} talents={talents} />
   }
 
   return (
@@ -85,7 +84,7 @@ export function ResultsSection({ talents, showResults, isAdmin, compact = false 
             </span>
           )}
         </div>
-        <ResultsList sorted={sorted} visible={visible} showResults={showResults} talents={talents} />
+        <ResultsList sorted={sorted} visible={visible} talents={talents} />
       </div>
     </section>
   )

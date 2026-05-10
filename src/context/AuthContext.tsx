@@ -27,15 +27,20 @@ function writeCache(user: AppUser | null) {
   }
 }
 
+// Estado interno (sin funciones)
 interface AuthState {
   firebaseUser: User | null
   appUser: AppUser | null
   loading: boolean
   domainError: string | null
+}
+
+// Valor expuesto por el contexto (estado + acciones)
+interface AuthContextValue extends AuthState {
   clearDomainError: () => void
 }
 
-const AuthContext = createContext<AuthState>({
+const AuthContext = createContext<AuthContextValue>({
   firebaseUser:     null,
   appUser:          null,
   loading:          true,
@@ -48,8 +53,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const [state, setState] = useState<AuthState>({
     firebaseUser: null,
-    appUser:      cached,       // arranca con el caché — sin flash
-    loading:      !cached,     // si hay caché, no hay loading inicial
+    appUser:      cached,
+    loading:      !cached,
     domainError:  null,
   })
 
@@ -63,9 +68,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           writeCache(null)
           setState({
             firebaseUser: null,
-            appUser: null,
-            loading: false,
-            domainError: `Solo se puede ingresar con cuentas personales de Google (@gmail.com). La cuenta ${email} es corporativa y no está permitida.`,
+            appUser:      null,
+            loading:      false,
+            domainError:  `Solo se puede ingresar con cuentas personales de Google (@gmail.com). La cuenta ${email} es corporativa y no está permitida.`,
           })
           return
         }

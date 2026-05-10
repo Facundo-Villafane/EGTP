@@ -1,4 +1,4 @@
-import { GiMagicHat, GiDramaMasks } from 'react-icons/gi'
+import { GiMagicHat } from 'react-icons/gi'
 import { FaMicrophone, FaGamepad, FaPaintBrush, FaLaughBeam, FaGuitar, FaEllipsisH, FaTheaterMasks, FaRunning } from 'react-icons/fa'
 import type { IconType } from 'react-icons'
 import { TALENT_TYPES } from '../../types/talent'
